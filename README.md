@@ -1,4 +1,4 @@
-# 🚀 API Plataforma SaaS & Cumplimiento Normativo (v1.0)
+# API Plataforma SaaS & Cumplimiento Normativo (v1.0)
 
 Este repositorio contiene la **API REST** para una plataforma móvil multi-tenant diseñada para conectar a empresas, consultores profesionales y proveedores certificados en un ecosistema unificado de certificaciones y cumplimiento normativo. 
 
@@ -6,7 +6,7 @@ El proyecto combina un **módulo legacy de administración SaaS** (protegido por
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 
 *   **Core**: Node.js & Express (ES Modules)
 *   **Base de datos**: MySQL & Sequelize ORM
@@ -19,37 +19,37 @@ El proyecto combina un **módulo legacy de administración SaaS** (protegido por
 
 ---
 
-## 🗄️ Estructura del Proyecto
+## Estructura del Proyecto
 
 El backend está organizado siguiendo una arquitectura desacoplada basada en capas (Modelos, Controladores, Servicios y Rutas):
 
 ```text
 API-ofertas-SAAS-MOVIL/
 │
-├── config/              # 🔧 Configuración de DB, JWT y credenciales
+├── config/              # Configuración de DB, JWT y credenciales
 │   ├── database.js      # Conexión principal de Sequelize
 │   └── jwt.js           # Clave secreta y configuración del token local
 │
-├── controllers/         # 🎮 Controladores (Recepción de peticiones HTTP)
+├── controllers/         # Controladores (Recepción de peticiones HTTP)
 │   ├── saas/            # Controladores del motor de administración SaaS
 │   ├── auth.controller.js
 │   ├── diagnostico.controller.js
 │   └── ...
 │
-├── database/            # 🗃️ Archivos y scripts de base de datos
+├── database/            # Archivos y scripts de base de datos
 │
-├── docs/                # 📖 Documentación extendida
+├── docs/                # Documentación extendida
 │   └── saas-admin.md    # Manual de la API SaaS Admin
 │
-├── empresas/            # 🏢 Modelos y servicios del inquilino (Tenant)
+├── empresas/            # Modelos y servicios del inquilino (Tenant)
 │
-├── middlewares/         # 🔐 Autenticación, roles, aislamiento de datos y Multer
+├── middlewares/         # Autenticación, roles, aislamiento de datos y Multer
 │   ├── clerk.middleware.js
 │   ├── auth.middleware.js
 │   └── uploadDocs.middleware.js
 │
-├── models/              # 🧩 Modelos de Sequelize y configuración de relaciones
-│   ├── index.js         # 🔥 Punto central de asociaciones de base de datos
+├── models/              # Modelos de Sequelize y configuración de relaciones
+│   ├── index.js         # Punto central de asociaciones de base de datos
 │   ├── Usuario.js
 │   ├── EmpresaPerfil.js
 │   ├── Consultor.js
@@ -57,30 +57,30 @@ API-ofertas-SAAS-MOVIL/
 │   ├── Diagnostico.js
 │   └── Recomendacion.js
 │
-├── planes/              # 💳 Módulo de planes de suscripción
+├── planes/              # Módulo de planes de suscripción
 │
-├── routes/              # 🚏 Definición de endpoints
+├── routes/              # Definición de endpoints
 │   ├── index.js         # Enrutador principal de la plataforma operativa (/api)
 │   ├── saas.routes.js   # Enrutador de administración global SaaS (/api/saas)
 │   └── ...
 │
-├── services/            # 🧠 Capa de lógica de negocio (El corazón de la API)
+├── services/            # Capa de lógica de negocio (El corazón de la API)
 │   ├── auth.service.js
 │   ├── diagnostico.service.js
 │   └── cleanup.service.js
 │
-├── suscripciones/       # 📄 Gestión de membresías y pagos de empresas clientes
+├── suscripciones/       # Gestión de membresías y pagos de empresas clientes
 │
-├── tests/               # 🧪 Pruebas de integración y unitarias
+├── tests/               # Pruebas de integración y unitarias
 │
-├── utils/               # 🧰 Helpers, respuestas HTTP unificadas
+├── utils/               # Helpers, respuestas HTTP unificadas
 │
-└── validations/         # ✅ Esquemas de validación de payloads con Joi
+└── validations/         # Esquemas de validación de payloads con Joi
 ```
 
 ---
 
-## ⚙️ Guía de Inicio Rápido (Setup)
+## Guía de Inicio Rápido (Setup)
 
 ### 1. Configurar Variables de Entorno (`.env`)
 Crea un archivo `.env` en la raíz del proyecto basándote en la siguiente plantilla:
@@ -130,7 +130,7 @@ npm run db:force
 
 ---
 
-## 🚏 Mapeo y Endpoints de la API
+## Mapeo y Endpoints de la API
 
 La API cuenta con dos contextos principales de ejecución:
 
@@ -164,39 +164,39 @@ La API cuenta con dos contextos principales de ejecución:
 ### 2. API Operativa y de Cumplimiento (`/api`)
 *Protección:* Rutas operativas privadas protegidas mediante cabecera `Authorization: Bearer <jwt_local_token>`.
 
-#### 🔐 Autenticación y Registro (`/auth`)
+#### Autenticación y Registro (`/auth`)
 *   `POST /login` - Inicio de sesión unificado para todos los perfiles de usuario. Retorna un JWT local.
 *   `POST /register-cliente-empresa` - Registro de empresas clientes (Categorías A o B). Permite cargar un logotipo en formato `multipart/form-data`.
 *   `POST /register-consultor` - Registro público de consultores. Requiere subir documentos obligatorios como Currículum Vitae (PDF/Imagen) y Título universitario.
 *   `POST /register-auditor` - Registro de auditores en formación. Requiere Currículum y Título universitario.
 
-#### 👑 Administración Operativa (`/admin/perfiles`)
+#### Administración Operativa (`/admin/perfiles`)
 *   `GET /empresas`, `GET /consultores`, `GET /auditores` - Listado de solicitudes de perfil para validación (filtrable por `estado_perfil`).
 *   `PATCH /empresas/:id/validar`, `PATCH /consultores/:id/validar`, `PATCH /auditores/:id/validar` - Aprobar o rechazar perfiles pendientes para darles de alta en la plataforma.
 
-#### 📊 Dashboard por Rol (`/dashboard`)
+#### Dashboard por Rol (`/dashboard`)
 *   `GET /` - Retorna los KPIs, actividades recientes, perfiles y recomendaciones específicas adaptadas automáticamente al rol del usuario autenticado (Empresa, Consultor o Auditor).
 
-#### 📋 Módulo de Diagnósticos y Recomendaciones (`/diagnosticos`)
+#### Módulo de Diagnósticos y Recomendaciones (`/diagnosticos`)
 *   `GET /` - Listar diagnósticos higiénico-sanitarios según el rol (el consultor ve los suyos, el auditor ve en los que asiste, y la empresa solo ve los finalizados).
 *   `POST /` - Crear diagnóstico inicial en estado `borrador` (Consultor).
 *   `POST /:id/recomendaciones` - Agregar recomendaciones de mejora en bloque y asociar proveedores oficiales.
 *   `GET /:id` - Obtener detalle del diagnóstico y sus recomendaciones.
 *   `PATCH /:id/finalizar` - Cerrar diagnóstico para que sea visible por la empresa evaluada.
 
-#### 🚚 Catálogo de Proveedores Verificados (`/proveedores` y `/admin/proveedores`)
+#### Catálogo de Proveedores Verificados (`/proveedores` y `/admin/proveedores`)
 *   `GET /` - Listar catálogo de proveedores para recomendaciones sanitarias.
 *   `GET /:id` - Detalle de un proveedor.
 *   `POST /` | `PUT /:id` | `DELETE /:id` - Creación, edición y desactivación de proveedores autorizados (Solo Rol Admin).
 
-#### 👤 Gestión de Cuenta Propia (`/perfil`)
+#### Gestión de Cuenta Propia (`/perfil`)
 *   `GET /me` - Obtener datos del perfil propio de la sesión.
 *   `PUT /me` - Modificar información de perfil y actualizar documentos en Supabase.
     *   *Regla Crítica*: Si un consultor/auditor edita campos sensibles (`cedula`) o actualiza `curriculum` o `titulo`, su perfil volverá automáticamente a estado `pendiente` de validación.
 
 ---
 
-## 🔗 Enlaces a Documentación de Referencia
+## Enlaces a Documentación de Referencia
 
 *   [Detalle de Nuevos Perfiles e Implementación](file:///c:/Users/Walner/PROYECTOS%20API%20%20CON%20NODE%20Y%20EXPRES/API-ofertas-SAAS-MOVIL/API-OFERTAS.MD)
 *   [Manual de Integración de Cumplimiento Técnico](file:///c:/Users/Walner/PROYECTOS%20API%20%20CON%20NODE%20Y%20EXPRES/API-ofertas-SAAS-MOVIL/API_PLATAFORMA_DOCS.md)
