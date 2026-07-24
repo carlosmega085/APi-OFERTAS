@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { clerkAuthenticate } from './middlewares/clerk.middleware.js';
+import { authenticate } from './middlewares/auth.middleware.js';
+import { authorize } from './middlewares/role.middleware.js';
 
 // ─── Imports SaaS Admin ──────────────────────────────
 import empresaRoutes from './empresas/empresa.routes.js';
@@ -12,8 +13,9 @@ import monitoreoController from './controllers/saas/monitoreo.controller.js';
 
 const router = Router();
 
-// ─── Proteger rutas globales SaaS (vía Clerk) ────────
-router.use(clerkAuthenticate);
+// ─── Proteger rutas globales SaaS (vía JWT local y rol admin) ────────
+router.use(authenticate);
+router.use(authorize(['admin']));
 
 // ─── Rutas SaaS Admin ────────────────────────────────
 router.use('/empresas', empresaRoutes);

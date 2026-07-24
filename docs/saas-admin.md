@@ -3,10 +3,9 @@
 Esta documentación detalla los endpoints para la gestión exclusiva de la plataforma SaaS. 
 
 > [!IMPORTANT]
-> **Seguridad (Vía Clerk):** Todos los endpoints listados a continuación están protegidos mediante **Clerk**.
+> **Seguridad (Vía JWT Local):** Todos los endpoints listados a continuación están protegidos mediante **JWT local** de un usuario con rol **admin**.
 > - **URL Base:** `http://localhost:3000/api/saas`
-> - **Header:** `Authorization: Bearer <clerk_session_token>`.
-> - **Aislamiento:** Esta autenticación y estas rutas son independientes del sistema de ventas.
+> - **Header:** `Authorization: Bearer <jwt_local_token>`.
 
 ### Estructura de Respuesta Estándar
 ```json

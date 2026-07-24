@@ -2,7 +2,7 @@
 
 Este repositorio contiene la **API REST** para una plataforma móvil multi-tenant diseñada para conectar a empresas, consultores profesionales y proveedores certificados en un ecosistema unificado de certificaciones y cumplimiento normativo. 
 
-El proyecto combina un **módulo legacy de administración SaaS** (protegido por **Clerk**) con un **módulo operativo de cumplimiento y diagnóstico** (protegido por **JWT local**).
+El proyecto combina un **módulo legacy de administración SaaS** y un **módulo operativo de cumplimiento y diagnóstico**, ambos protegidos mediante **JWT local**.
 
 ---
 
@@ -13,7 +13,7 @@ El proyecto combina un **módulo legacy de administración SaaS** (protegido por
 *   **Almacenamiento de archivos**: Supabase Storage (Bucket: `comprobantes`)
 *   **Validación de esquemas**: Joi
 *   **Autenticación**:
-    *   **SaaS Admin**: Autenticación centralizada y externa con **Clerk**.
+    *   **SaaS Admin**: Autenticación local mediante **JSON Web Token (JWT)** (requiere rol de `admin`).
     *   **Plataforma Operativa**: Autenticación local mediante **JSON Web Token (JWT)**.
 *   **Tareas Programadas**: Node-Cron (Servicio de limpieza y mantenimiento automático).
 
@@ -44,8 +44,8 @@ API-ofertas-SAAS-MOVIL/
 ├── empresas/            # Modelos y servicios del inquilino (Tenant)
 │
 ├── middlewares/         # Autenticación, roles, aislamiento de datos y Multer
-│   ├── clerk.middleware.js
 │   ├── auth.middleware.js
+│   ├── role.middleware.js
 │   └── uploadDocs.middleware.js
 │
 ├── models/              # Modelos de Sequelize y configuración de relaciones
@@ -101,9 +101,7 @@ JWT_SECRET=tu_secreto_super_seguro_para_jwt
 SUPABASE_URL=https://xxxxxxxxxxxxxxxxxxxx.supabase.co
 SUPABASE_KEY=tu_supabase_anon_or_service_key
 
-# Clerk Admin Integration
-CLERK_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxxxxxxxxxx
-CLERK_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxxxx
+# La autenticación es 100% mediante JWT Local (no se requiere integración externa con Clerk).
 ```
 
 ### 2. Instalar Dependencias
@@ -135,7 +133,7 @@ npm run db:force
 La API cuenta con dos contextos principales de ejecución:
 
 ### 1. API Global SaaS Admin (`/api/saas`)
-*Protección:* Requiere cabecera `Authorization: Bearer <clerk_session_token>` validada por **Clerk**.
+*Protección:* Requiere cabecera `Authorization: Bearer <jwt_local_token>` de un usuario con rol de **admin**.
 
 *   **Empresas (`/empresas`)**:
     *   `POST /` - Crear empresa con su usuario administrador, suscripción inicial pendiente y juegos/turnos por defecto.
