@@ -508,7 +508,61 @@ Exclusivo para el `consultor` creador. Pasa el diagnóstico a `'finalizado'`, ha
 }
 ```
 
+### 6. Firmar Diagnóstico (`PATCH /:id/firmar`)
+
+Exclusivo para el rol `empresa` representante (dueño de la empresa evaluada) o `admin`. Cambia el estado del diagnóstico a `'firmado'` tras registrar la firma del representante legal. El diagnóstico debe estar previamente en estado `'finalizado'`.
+
+*   **Payload (JSON)**:
+    ```json
+    {
+      "firma_nombre": "Carlos Gómez"
+    }
+    ```
+*   **Respuesta (200)**:
+    ```json
+    {
+      "success": true,
+      "message": "Diagnóstico firmado y aceptado exitosamente.",
+      "data": {
+        "id": 1,
+        "estado": "firmado",
+        "firma_nombre": "Carlos Gómez",
+        "fecha_firma": "2026-07-23T18:44:16.000Z"
+      }
+    }
+    ```
+*   **Errores comunes**:
+    *   `400 Bad Request`: Si el diagnóstico aún está en `borrador` (debe ser finalizado primero por el consultor) o si ya fue firmado previamente.
+    *   `403 Forbidden`: Si el usuario representa a otra empresa distinta a la del diagnóstico.
+
+### 7. Actualizar Seguimiento de Recomendación (`PUT /recomendaciones/:recomendacionId/seguimiento`)
+
+Permite a la `empresa` o `admin` reportar el avance en la implementación de una recomendación de mejora.
+
+*   **Formato**: `multipart/form-data`
+*   **Campos de Texto**:
+    *   `estado_seguimiento` (Requerido) - Valores válidos: `pendiente`, `en_progreso`, `implementado`.
+*   **Archivos**:
+    *   `evidencia` (Opcional) - Archivo de imagen o PDF que pruebe la implementación física de la recomendación.
+*   **Respuesta (200)**:
+    ```json
+    {
+      "success": true,
+      "message": "Seguimiento de recomendación actualizado exitosamente.",
+      "data": {
+        "id": 3,
+        "diagnostico_id": 1,
+        "tipo_sugerencia": "equipo",
+        "descripcion": "Instalar lavamanos de pedal en la entrada",
+        "estado_seguimiento": "implementado",
+        "evidencia_url": "https://supabase.co/storage/v1/object/public/comprobantes/evidencia-3.jpg",
+        "fecha_implementacion": "2026-07-23T18:44:16.000Z"
+      }
+    }
+    ```
+
 ---
+
 
 ## 🚚 Módulo de Proveedores Verificados (Ecosistema Global)
 
@@ -620,6 +674,114 @@ Permite actualizar los datos del perfil y subir nuevos documentos o imágenes a 
   }
 }
 ```
+
+---
+
+## 📇 Módulo de Directorio Compartido (Ecosistema)
+
+Base URL: `/api/directorio`
+
+Este catálogo compartido permite buscar e interconectar a los tres roles del sistema (Empresas, Consultores y Auditores) que hayan sido previamente validados y aprobados por la administración (`estado_perfil: 'aprobado'`).
+
+### 1. Directorio de Consultores (`GET /consultores`)
+
+*   **Permisos**: Cualquier usuario autenticado (Empresas, Consultores, Auditores, Administradores).
+*   **Respuesta (200)**:
+    ```json
+    {
+      "success": true,
+      "message": "Directorio de consultores obtenido exitosamente.",
+      "data": [
+        {
+          "id": 1,
+          "usuario_id": 2,
+          "empresa_id": 1,
+          "correo": "sofia.martinez@email.com",
+          "telefono": "+505 7777-6666",
+          "cv_url": "https://supabase.co/storage/v1/object/public/comprobantes/1/cv.pdf",
+          "titulo_url": "https://supabase.co/storage/v1/object/public/comprobantes/1/titulo.pdf",
+          "maestria_url": "https://supabase.co/storage/v1/object/public/comprobantes/1/maestria.pdf",
+          "foto_url": "https://supabase.co/storage/v1/object/public/comprobantes/1/foto.png",
+          "estado_perfil": "aprobado",
+          "Usuario": {
+            "id": 2,
+            "nombre": "Dra. Sofía Martínez",
+            "username": "sofia.martinez",
+            "email": "sofia.martinez@email.com"
+          }
+        }
+      ]
+    }
+    ```
+
+### 2. Directorio de Empresas (`GET /empresas`)
+
+*   **Permisos**: Consultores, Auditores y Administradores (`consultor`, `auditor`, `admin`).
+*   **Respuesta (200)**:
+    ```json
+    {
+      "success": true,
+      "message": "Directorio de empresas obtenido exitosamente.",
+      "data": [
+        {
+          "id": 1,
+          "empresa_id": 5,
+          "usuario_id": 10,
+          "razon_social": "Alimentos de la Abuela S.A.",
+          "rup": "RUP-998877",
+          "descripcion": "Fábrica procesadora de lácteos y embutidos",
+          "representante_nombre": "Carlos Gómez",
+          "representante_telefono": "+505 8888-8888",
+          "representante_correo": "carlos.gomez@email.com",
+          "tipo_servicio": "Consultoría Sanitaria",
+          "logo_url": "https://supabase.co/storage/v1/object/public/logos/1.png",
+          "estado_perfil": "aprobado",
+          "Usuario": {
+            "id": 10,
+            "nombre": "Carlos Gómez",
+            "username": "carlos.gomez",
+            "email": "carlos.gomez@email.com"
+          },
+          "Empresa": {
+            "id": 5,
+            "nombre": "Alimentos de la Abuela S.A.",
+            "estado": "activo"
+          }
+        }
+      ]
+    }
+    ```
+
+### 3. Directorio de Auditores en Formación (`GET /auditores`)
+
+*   **Permisos**: Consultores y Administradores (`consultor`, `admin`).
+*   **Respuesta (200)**:
+    ```json
+    {
+      "success": true,
+      "message": "Directorio de auditores en formación obtenido exitosamente.",
+      "data": [
+        {
+          "id": 1,
+          "usuario_id": 3,
+          "empresa_id": 1,
+          "correo": "pedro.auditor@email.com",
+          "telefono": "+505 5555-4444",
+          "cv_url": "https://supabase.co/storage/v1/object/public/comprobantes/1/cv.pdf",
+          "titulo_url": "https://supabase.co/storage/v1/object/public/comprobantes/1/titulo.pdf",
+          "capacitacion_url": "https://supabase.co/storage/v1/object/public/comprobantes/1/cap.pdf",
+          "foto_url": "https://supabase.co/storage/v1/object/public/comprobantes/1/foto.png",
+          "estado_perfil": "aprobado",
+          "Usuario": {
+            "id": 3,
+            "nombre": "Pedro Auditor",
+            "username": "pedro.auditor",
+            "email": "pedro.auditor@email.com"
+          }
+        }
+      ]
+    }
+    ```
 
 ---
 
