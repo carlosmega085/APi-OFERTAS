@@ -1,0 +1,35 @@
+# Dependencias de Node
+node_modules/
+
+# Archivos de Entorno (Contienen secretos y llaves de API)
+.env
+.env.dev
+.env.prod
+.env.local
+.env.*.local
+
+# Logs del Sistema y de la Aplicación
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Compilados y Carpetas de Distribución
+dist/
+build/
+
+# Directorios de Editores e IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Archivos del Sistema Operativo
+.DS_Store
+Thumbs.db
+
+# Temporales y Scratchpad
+scratch/
