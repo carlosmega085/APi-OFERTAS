@@ -192,6 +192,11 @@ La API cuenta con dos contextos principales de ejecución:
 *   `PUT /me` - Modificar información de perfil y actualizar documentos en Supabase.
     *   *Regla Crítica*: Si un consultor/auditor edita campos sensibles (`cedula`) o actualiza `curriculum` o `titulo`, su perfil volverá automáticamente a estado `pendiente` de validación.
 
+#### Directorio Compartido (`/directorio`)
+*   `GET /consultores` - Directorio de consultores aprobados (Accesible por cualquier usuario autenticado).
+*   `GET /empresas` - Directorio de empresas aprobadas con perfiles públicos (Accesible por Consultor, Auditor y Admin).
+*   `GET /auditores` - Directorio de auditores en formación aprobados (Accesible por Consultor y Admin).
+
 ---
 
 ## Enlaces a Documentación de Referencia

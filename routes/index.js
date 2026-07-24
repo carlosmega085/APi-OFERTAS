@@ -9,6 +9,7 @@ import dashboardRoutes from './dashboard.routes.js';
 import diagnosticoRoutes from './diagnostico.routes.js';
 import proveedorRoutes from './proveedor.routes.js';
 import perfilRoutes from './perfil.routes.js';
+import directorioRoutes from './directorio.routes.js';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/dashboard', dashboardRoutes); // Dashboard dinámico por rol de usu
 router.use('/diagnosticos', diagnosticoRoutes); // Gestión de diagnósticos y recomendaciones
 router.use('/proveedores', proveedorRoutes); // Consulta de proveedores verificados
 router.use('/perfil', perfilRoutes); // Edición y consulta de perfil de usuario actual
+router.use('/directorio', directorioRoutes); // Directorio compartido de consultores, empresas y auditores
 
 export default router;

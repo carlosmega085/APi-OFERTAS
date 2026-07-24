@@ -204,3 +204,18 @@ Por ejemplo, durante el registro de una Empresa en el panel de administración S
 *   Se siembra el catálogo inicial de configuración y turnos.
 *   **Si todo es exitoso**: Se realiza un `commit` físico en el motor MySQL.
 *   **Si ocurre un fallo en cualquier paso**: Se ejecuta automáticamente un `rollback`, devolviendo la base de datos a su estado original previo al inicio del registro.
+
+---
+
+## 7. Módulo de Directorio Compartido e Interconexión de Actores
+
+Para cumplir con el reto de interconectar a los tres actores principales (Empresas, Consultores y Auditores), la API implementa un directorio compartido y seguro de perfiles que hayan completado con éxito su proceso de validación (`estado_perfil: 'aprobado'`).
+
+### Reglas de Control de Acceso (RBAC) y Seguridad
+*   **Directorio de Consultores (`GET /api/directorio/consultores`)**: Abierto para cualquier rol autenticado en la plataforma. Esto permite que las empresas visualicen y contacten a los asesores y técnicos aprobados.
+*   **Directorio de Empresas (`GET /api/directorio/empresas`)**: Accesible únicamente por roles técnicos (`consultor`, `auditor`, `admin`). Esto evita que las empresas espíen la lista de otros clientes registrados, pero brinda a los consultores la información necesaria para iniciar un diagnóstico.
+*   **Directorio de Auditores (`GET /api/directorio/auditores`)**: Exclusivo para consultores y administradores (`consultor`, `admin`). Permite que un consultor busque y asigne un auditor sombra a un diagnóstico determinado.
+
+### Protección de Datos
+Los métodos del servicio `DirectorioService` realizan un filtrado estricto a nivel de proyección SQL en Sequelize (usando el parámetro `attributes`), asegurando que no se expongan hashes de contraseñas u otros datos confidenciales de validación interna.
+
