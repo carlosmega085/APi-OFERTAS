@@ -12,6 +12,8 @@ import Auditor from './Auditor.js';
 import Proveedor from './Proveedor.js';
 import Diagnostico from './Diagnostico.js';
 import Recomendacion from './Recomendacion.js';
+import Conversacion from './Conversacion.js';
+import Mensaje from './Mensaje.js';
 
 // --- CORE RELATIONS ---
 
@@ -76,6 +78,19 @@ Recomendacion.belongsTo(Diagnostico, { foreignKey: 'diagnostico_id' });
 Proveedor.hasMany(Recomendacion, { foreignKey: 'proveedor_id', as: 'sugerencias' });
 Recomendacion.belongsTo(Proveedor, { foreignKey: 'proveedor_id' });
 
+// --- MESSAGING SYSTEM ---
+
+// Conversacion <-> Usuario
+Conversacion.belongsTo(Usuario, { foreignKey: 'usuario1_id', as: 'usuario1' });
+Conversacion.belongsTo(Usuario, { foreignKey: 'usuario2_id', as: 'usuario2' });
+
+// Conversacion <-> Mensaje
+Conversacion.hasMany(Mensaje, { foreignKey: 'conversacion_id', as: 'mensajes', onDelete: 'CASCADE' });
+Mensaje.belongsTo(Conversacion, { foreignKey: 'conversacion_id' });
+
+// Mensaje <-> Usuario (Emisor)
+Mensaje.belongsTo(Usuario, { foreignKey: 'emisor_id', as: 'emisor' });
+
 // --- MISC / IDEMPOTENCY ---
 
 // PeticionProcesada (Seguridad contra reintentos por errores de red)
@@ -98,5 +113,7 @@ export {
   Auditor,
   Proveedor,
   Diagnostico,
-  Recomendacion
+  Recomendacion,
+  Conversacion,
+  Mensaje
 };

@@ -211,3 +211,11 @@ _Protección:_ Rutas operativas privadas protegidas mediante cabecera `Authoriza
 - `GET /consultores` - Directorio de consultores aprobados (Accesible por cualquier usuario autenticado).
 - `GET /empresas` - Directorio de empresas aprobadas con perfiles públicos (Accesible por Consultor, Auditor y Admin).
 - `GET /auditores` - Directorio de auditores en formación aprobados (Accesible por Consultor y Admin).
+
+#### Módulo de Mensajería Interna (`/mensajeria`)
+
+- `GET /conversaciones` - Obtener lista de chats/conversaciones del usuario actual ordenados por el último mensaje.
+- `POST /conversaciones` - Obtener o iniciar un chat con otro usuario enviando `{ receptor_id }`.
+- `GET /conversaciones/:id/mensajes` - Consultar el historial de mensajes de un chat y marcarlos como leídos automáticamente.
+- `POST /conversaciones/:id/mensajes` - Enviar un nuevo mensaje dentro de un chat.
+

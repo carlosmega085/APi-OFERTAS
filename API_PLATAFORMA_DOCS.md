@@ -785,6 +785,135 @@ Este catálogo compartido permite buscar e interconectar a los tres roles del si
 
 ---
 
+## 💬 Módulo de Mensajería Interna (Privado)
+
+Base URL: `/api/mensajeria`
+
+Este módulo permite establecer canales de comunicación y chats privados entre las distintas cuentas de usuarios de la plataforma (Empresas, Consultores, Auditores y Administradores).
+
+### 1. Obtener Lista de Conversaciones (`GET /conversaciones`)
+
+Retorna la lista de chats activos del usuario autenticado actual, incluyendo una previsualización del último mensaje y la información formateada del otro participante en el chat (`otro_usuario`).
+
+*   **Respuesta (200)**:
+    ```json
+    {
+      "success": true,
+      "message": "Conversaciones obtenidas exitosamente.",
+      "data": [
+        {
+          "id": 1,
+          "usuario1_id": 3,
+          "usuario2_id": 5,
+          "ultimo_mensaje": "Hola, ¿cómo va el diagnóstico?",
+          "fecha_ultimo_mensaje": "2026-07-27T04:46:00.000Z",
+          "created_at": "2026-07-27T04:45:00.000Z",
+          "updated_at": "2026-07-27T04:46:00.000Z",
+          "otro_usuario": {
+            "id": 5,
+            "nombre": "Juan Consultor",
+            "username": "juan.consultor",
+            "rol": "consultor",
+            "email": "juan@email.com"
+          }
+        }
+      ]
+    }
+    ```
+
+### 2. Iniciar o Recuperar Conversación (`POST /conversaciones`)
+
+Crea un canal de chat único entre el usuario autenticado y un receptor específico. Si el chat ya existe, lo recupera directamente de la base de datos sin duplicar registros.
+
+*   **Payload (JSON)**:
+    ```json
+    {
+      "receptor_id": 5
+    }
+    ```
+*   **Respuesta (200/201)**:
+    ```json
+    {
+      "success": true,
+      "message": "Conversación obtenida o creada exitosamente.",
+      "data": {
+        "id": 1,
+        "usuario1_id": 3,
+        "usuario2_id": 5,
+        "ultimo_mensaje": null,
+        "fecha_ultimo_mensaje": null,
+        "created_at": "2026-07-27T04:45:00.000Z",
+        "updated_at": "2026-07-27T04:45:00.000Z"
+      }
+    }
+    ```
+
+### 3. Consultar Mensajes de un Chat (`GET /conversaciones/:id/mensajes`)
+
+Obtiene el historial de mensajes de la conversación específica de manera cronológica (antiguos a nuevos).
+> **Nota de Control de Lectura:** Al llamar a este endpoint, todos los mensajes no leídos enviados por la otra persona dentro de esta conversación se marcan automáticamente como leídos (`leido: true`, `fecha_lectura: Date`).
+
+*   **Query Params (Opcionales)**: `?limit=50&offset=0`
+*   **Respuesta (200)**:
+    ```json
+    {
+      "success": true,
+      "message": "Mensajes de la conversación obtenidos exitosamente.",
+      "data": [
+        {
+          "id": 12,
+          "conversacion_id": 1,
+          "emisor_id": 5,
+          "contenido": "Hola, ¿cómo va el diagnóstico?",
+          "leido": true,
+          "fecha_lectura": "2026-07-27T04:50:00.000Z",
+          "created_at": "2026-07-27T04:46:00.000Z",
+          "updated_at": "2026-07-27T04:50:00.000Z",
+          "emisor": {
+            "id": 5,
+            "nombre": "Juan Consultor",
+            "rol": "consultor"
+          }
+        }
+      ]
+    }
+    ```
+
+### 4. Enviar Mensaje (`POST /conversaciones/:id/mensajes`)
+
+Envía un mensaje de texto dentro del chat especificado y actualiza automáticamente los campos de visualización de la conversación (`ultimo_mensaje` y `fecha_ultimo_mensaje`).
+
+*   **Payload (JSON)**:
+    ```json
+    {
+      "contenido": "Hola. Ya casi terminamos la evaluación, te aviso pronto."
+    }
+    ```
+*   **Respuesta (201)**:
+    ```json
+    {
+      "success": true,
+      "message": "Mensaje enviado exitosamente.",
+      "data": {
+        "id": 13,
+        "conversacion_id": 1,
+        "emisor_id": 3,
+        "contenido": "Hola. Ya casi terminamos la evaluación, te aviso pronto.",
+        "leido": false,
+        "fecha_lectura": null,
+        "created_at": "2026-07-27T04:52:00.000Z",
+        "updated_at": "2026-07-27T04:52:00.000Z",
+        "emisor": {
+          "id": 3,
+          "nombre": "Empresa Alimentos",
+          "rol": "empresa"
+        }
+      }
+    }
+    ```
+
+---
+
 ## ⚙️ Guía de Puesta en Marcha (Setup)
 
 1. **Configurar el Entorno (`.env`)**:

@@ -10,6 +10,7 @@ import diagnosticoRoutes from './diagnostico.routes.js';
 import proveedorRoutes from './proveedor.routes.js';
 import perfilRoutes from './perfil.routes.js';
 import directorioRoutes from './directorio.routes.js';
+import mensajeriaRoutes from './mensajeria.routes.js';
 
 const router = Router();
 
@@ -24,5 +25,6 @@ router.use('/diagnosticos', diagnosticoRoutes); // Gestión de diagnósticos y r
 router.use('/proveedores', proveedorRoutes); // Consulta de proveedores verificados
 router.use('/perfil', perfilRoutes); // Edición y consulta de perfil de usuario actual
 router.use('/directorio', directorioRoutes); // Directorio compartido de consultores, empresas y auditores
+router.use('/mensajeria', mensajeriaRoutes); // Mensajería interna (Chats y Mensajes)
 
 export default router;
