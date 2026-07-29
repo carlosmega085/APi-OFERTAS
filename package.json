@@ -10,6 +10,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "db:force": "node scripts/sync_db.js",
+    "db:seed": "node scripts/seed_demo_data.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

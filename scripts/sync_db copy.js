@@ -2,7 +2,7 @@ import { sequelize, Plan } from '../models/index.js';
 
 const syncDB = async () => {
   try {
-    console.log('🔄 Reiniciando base de datos...');
+    console.log(' Reiniciando base de datos...');
 
     await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
 
@@ -17,7 +17,7 @@ const syncDB = async () => {
 
     await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
-    console.log('✅ Tablas creadas');
+    console.log(' Tablas creadas');
 
     // SEED CORRECTO (ALINEADO CON EL MODELO)
     await Plan.bulkCreate([
@@ -53,12 +53,12 @@ const syncDB = async () => {
       }
     ]);
 
-    console.log('✅ Planes insertados');
-    console.log('🚀 DB lista');
+    console.log(' Planes insertados');
+    console.log(' DB lista');
 
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error(' Error:', error);
     process.exit(1);
   }
 };
