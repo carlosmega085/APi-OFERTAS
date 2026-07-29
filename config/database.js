@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME || 'app_venta_saas',
+  process.env.DB_NAME || 'app_certificaciones',
   process.env.DB_USER || 'root',
   process.env.DB_PASSWORD || '',
   {
