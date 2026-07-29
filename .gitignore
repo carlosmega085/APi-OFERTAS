@@ -35,3 +35,9 @@ Thumbs.db
 scratch/
 
 database.dbml
+
+# Documentos markdown específicos
+API_PLATAFORMA_DOCS.md
+EJ.CARPTAS.MD
+API-OFERTAS.MD
+Mobile_App.MD
